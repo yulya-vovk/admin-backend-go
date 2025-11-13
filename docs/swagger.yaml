@@ -1,0 +1,394 @@
+basePath: /
+definitions:
+  models.Contacts:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      social_media_two_gis:
+        type: string
+      social_media_vk:
+        type: string
+      social_media_ya:
+        type: string
+      website:
+        type: string
+      work_schedule:
+        type: string
+    type: object
+  models.Docs:
+    properties:
+      file:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Gallery:
+    properties:
+      filename:
+        type: string
+      hidden:
+        type: boolean
+      id:
+        type: integer
+    type: object
+  models.Services:
+    properties:
+      eng:
+        type: string
+      id:
+        type: integer
+      prices:
+        type: string
+      src:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@localhost
+    name: API Support
+  description: REST API для административной панели базы отдыха.
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Админка API
+  version: "1.0"
+paths:
+  /contacts:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Contacts'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Получить контактную информацию
+      tags:
+      - contacts
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Новая запись
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/models.Contacts'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Contacts'
+      summary: Создать контакты
+      tags:
+      - contacts
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Обновлённые данные
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/models.Contacts'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Contacts'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Обновить контактную информацию
+      tags:
+      - contacts
+  /docs:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Docs'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Получить список документов
+      tags:
+      - docs
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Документ создан
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Docs'
+      summary: Создать новый документ
+      tags:
+      - docs
+  /docs/{id}:
+    delete:
+      parameters:
+      - description: ID документа
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Успешно удалено
+      summary: Удалить документ
+      tags:
+      - docs
+    put:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: ID документа
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новый файл
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Docs'
+      summary: Обновить данные документа
+      tags:
+      - docs
+  /gallery:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Gallery'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Получить список изображений
+      tags:
+      - gallery
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Фото для загрузки
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Gallery'
+            type: array
+      summary: Загрузить фото в галерею
+      tags:
+      - gallery
+  /gallery/{id}:
+    delete:
+      parameters:
+      - description: ID изображения
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Успешно удалено
+      summary: Удалить изображение
+      tags:
+      - gallery
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID документа
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновлённые данные
+        in: body
+        name: gallery
+        required: true
+        schema:
+          $ref: '#/definitions/models.Gallery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Gallery'
+      summary: Обновить данные изображения
+      tags:
+      - gallery
+  /services:
+    get:
+      description: Возвращает все услуги из БД
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Services'
+            type: array
+        "400":
+          description: Неверный запрос
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Получить список услуг
+      tags:
+      - services
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Новая услуга
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/models.Services'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Services'
+        "400":
+          description: Неверный запрос
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Ошибка БД
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Создать новую услугу (только для админа)
+      tags:
+      - admin-services
+  /services/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID услуги
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновлённые данные
+        in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/models.Services'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Services'
+        "400":
+          description: Неверный ID или JSON
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Услуга не найдена
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Ошибка БД
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Обновить данные услуги
+      tags:
+      - services
+securityDefinitions:
+  ApiKeyAuth:
+    description: 'Опционально: можно добавить JWT в будущем'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

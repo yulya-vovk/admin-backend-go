@@ -1,0 +1,22 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Логи
+*.log
+
+/uploads/
+
+vendor/
+
+# Env
+.env
